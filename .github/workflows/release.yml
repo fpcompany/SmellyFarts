@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Package
+        run: .github/package.sh "$GITHUB_REF_NAME"
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prerelease=()
+          [[ $GITHUB_REF_NAME == *-* ]] && prerelease=(--prerelease)
+          addon=$(basename "$(ls ./*.toc | head -1)" .toc)
+          gh release create "$GITHUB_REF_NAME" dist/*.zip dist/release.json \
+            --title "$addon $GITHUB_REF_NAME" --notes-file dist/notes.md "${prerelease[@]}"
