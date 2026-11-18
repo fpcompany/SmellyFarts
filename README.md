@@ -10,6 +10,16 @@ Each kill plays one of these:
 - Wilhelm scream
 - Minecraft oof
 - Roblox oof
+- Fart with extra reverb
+- Bass-boosted fart
+- Fart squeak
+- Ahhhh
+- Faaaa
+- Lego Yoda death
+- Slap
+- TF2 domination
+- Windows XP shutdown
+- Tom scream
 
 Everyone in the party running SmellyFarts hears the same sound for the same
 death. The sound is picked from who died and the server time (in 3-minute

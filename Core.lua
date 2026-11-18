@@ -13,6 +13,16 @@ local SOUNDS = {
 	{ name = 'Wilhelm scream', file = MEDIA .. 'wilhelm_scream.ogg' },
 	{ name = 'Minecraft oof', file = MEDIA .. 'minecraft_oof.ogg' },
 	{ name = 'Roblox oof', file = MEDIA .. 'roblox_oof.ogg' },
+	{ name = 'Fart with extra reverb', file = MEDIA .. 'fart-with-extra-reverb.ogg' },
+	{ name = 'Bass-boosted fart', file = MEDIA .. 'fart-with-reverb-and-bass-boost.ogg' },
+	{ name = 'Fart squeak', file = MEDIA .. 'fart-squeak-reverb.ogg' },
+	{ name = 'Ahhhh', file = MEDIA .. 'ahhhh-gachi-muchi.ogg' },
+	{ name = 'Faaaa', file = MEDIA .. 'faaaa.ogg' },
+	{ name = 'Lego Yoda death', file = MEDIA .. 'lego-yoda-death-sound-effect.ogg' },
+	{ name = 'Slap', file = MEDIA .. 'slap.ogg' },
+	{ name = 'TF2 domination', file = MEDIA .. 'tf_domination.ogg' },
+	{ name = 'Windows XP shutdown', file = MEDIA .. 'windows_xp_shutdown.ogg' },
+	{ name = 'Tom scream', file = MEDIA .. 'tom-scream-01.ogg' },
 }
 local ICON = MEDIA .. 'Icon'
 
