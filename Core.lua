@@ -45,12 +45,58 @@ local function PlayEntry(sound)
 	return willPlay, handle
 end
 
-local function PlayDeathSound()
-	PlayEntry(SOUNDS[math.random(#SOUNDS)])
-end
-
 local function Known(value)
 	return value ~= nil and not issecretvalue(value)
+end
+
+-- Every party member should hear the same sound for the same death, without
+-- the clients talking to each other. So the sound is picked from what all of
+-- them agree on: who died (GUID, or name-realm) and the server time cut into
+-- windows. The window makes a given enemy's sound change over time; clients
+-- disagree only when a death lands right on a window edge.
+local SYNC_WINDOW = 180 -- seconds
+
+-- djb2 plus a few rounds of squaring mod a prime, since plain djb2 just steps
+-- through the sounds in order as the window number counts up. Everything
+-- stays below 2^53, so the math is exact and every client gets the same number.
+local HASH_PRIME = 67108859 -- < 2^26, so squares stay exact in a double
+local function HashIndex(str, n)
+	local h = 5381
+	for i = 1, #str do
+		h = (h * 33 + str:byte(i)) % 4294967296
+	end
+	h = h % HASH_PRIME
+	for _ = 1, 3 do
+		h = (h * h + 7919) % HASH_PRIME
+	end
+	return h % n + 1
+end
+
+-- an identity string that's the same on every client, or nil
+local function SharedId(unit)
+	local guid = UnitGUID(unit)
+	if Known(guid) then return guid end
+	local name, realm = UnitName(unit)
+	if Known(name) and not issecretvalue(realm) then
+		-- realm is nil when the unit is on the observer's realm, which
+		-- differs between observers
+		if not realm or realm == '' then realm = GetNormalizedRealmName() end
+		if realm then return name .. '-' .. realm end
+	end
+end
+
+local function PickSound(unit)
+	local id = unit and SharedId(unit)
+	if not id then
+		Debug('no shared id, picking at random')
+		return SOUNDS[math.random(#SOUNDS)]
+	end
+	local bucket = math.floor(GetServerTime() / SYNC_WINDOW)
+	return SOUNDS[HashIndex(id .. ':' .. bucket, #SOUNDS)]
+end
+
+local function PlayDeathSound(unit)
+	PlayEntry(PickSound(unit))
 end
 
 -- Only these unit tokens are looked at. Others (targettarget, ...) are copies
@@ -114,7 +160,7 @@ local function CheckUnit(unit, silent)
 
 	if dead and not state.dead and not silent and (state.enemy or IsEnemyNow(unit)) then
 		Debug('%s died', tostring(UnitName(unit)))
-		PlayDeathSound()
+		PlayDeathSound(unit)
 	end
 	state.dead = dead
 end

@@ -3,13 +3,18 @@
 A World of Warcraft addon that plays a sound when an enemy player dies. Works
 on retail Midnight (Interface 120100) and WoW Forever (Interface 16001).
 
-Each kill plays one of these at random:
+Each kill plays one of these:
 
 - Fart
 - Wet fart
 - Wilhelm scream
 - Minecraft oof
 - Roblox oof
+
+Everyone in the party running SmellyFarts hears the same sound for the same
+death. The sound is picked from who died and the server time (in 3-minute
+windows), so no messages are sent between players. A given enemy keeps the
+same sound for up to 3 minutes, then gets a new one.
 
 ## How deaths are noticed
 
