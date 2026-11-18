@@ -334,7 +334,7 @@ local function ShowTooltip(self)
 	GameTooltip:AddLine('SmellyFarts')
 	GameTooltip:AddLine(db.enabled and '|cff00ff00Enabled|r' or '|cffff0000Disabled|r')
 	GameTooltip:AddLine('Left-click: enable / disable', 1, 1, 1)
-	GameTooltip:AddLine('Right-click: sound test panel', 1, 1, 1)
+	GameTooltip:AddLine('Shift + middle-click: sound test panel', 1, 1, 1)
 	GameTooltip:AddLine('Drag: move', 1, 1, 1)
 	GameTooltip:Show()
 end
@@ -346,7 +346,7 @@ local function CreateButton()
 	button:SetSize(31, 31)
 	button:SetFrameStrata('MEDIUM')
 	button:SetFrameLevel(8)
-	button:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
+	button:RegisterForClicks('LeftButtonUp', 'MiddleButtonUp')
 	button:RegisterForDrag('LeftButton')
 	button:SetHighlightTexture(136477) -- Interface\Minimap\UI-Minimap-ZoomButton-Highlight
 
@@ -368,8 +368,8 @@ local function CreateButton()
 	button.icon = icon
 
 	button:SetScript('OnClick', function(self, mouseButton)
-		if mouseButton == 'RightButton' then
-			TogglePanel()
+		if mouseButton == 'MiddleButton' then
+			if IsShiftKeyDown() then TogglePanel() end
 		else
 			SetEnabled(not db.enabled)
 		end

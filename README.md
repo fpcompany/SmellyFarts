@@ -27,7 +27,7 @@ targeted) can't be noticed.
 ## Minimap button
 
 - **Left-click:** turn SmellyFarts on or off
-- **Right-click:** sound test panel
+- **Shift + middle-click:** sound test panel
 - **Drag:** move it around the minimap
 
 ## Commands
