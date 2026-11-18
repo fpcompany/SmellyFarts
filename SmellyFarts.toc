@@ -2,7 +2,7 @@
 ## Title: SmellyFarts
 ## Notes: Plays a sound when an enemy player dies.
 ## Author: Benis
-## Version: 0.1.0
+## Version: 0.2.0
 ## SavedVariables: SmellyFartsDB
 ## IconTexture: Interface\AddOns\SmellyFarts\Media\Icon
 ## X-Website: https://github.com/fpcompany/SmellyFarts
