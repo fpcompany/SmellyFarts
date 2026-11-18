@@ -1,3 +1,5 @@
 dist/
 Media.orig/
 Media.prev/
+dev-link.sh
+dev-unlink.sh
