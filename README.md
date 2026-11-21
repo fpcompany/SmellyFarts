@@ -20,6 +20,7 @@ Each kill plays one of these:
 - TF2 domination
 - Windows XP shutdown
 - Tom scream
+- MLG air horn
 
 Everyone in the party running SmellyFarts hears the same sound for the same
 death. The sound is picked from who died and the server time (in 3-minute

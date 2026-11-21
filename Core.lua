@@ -23,6 +23,7 @@ local SOUNDS = {
 	{ name = 'TF2 domination', file = MEDIA .. 'tf_domination.ogg' },
 	{ name = 'Windows XP shutdown', file = MEDIA .. 'windows_xp_shutdown.ogg' },
 	{ name = 'Tom scream', file = MEDIA .. 'tom-scream-01.ogg' },
+	{ name = 'MLG air horn', file = MEDIA .. 'mlg_air_horn.ogg' },
 }
 local ICON = MEDIA .. 'Icon'
 
