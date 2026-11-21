@@ -149,6 +149,70 @@ local function IsDead(unit)
 	return dead and true or false
 end
 
+-- Hunters. UnitIsFeignDeath only answers for group members; to an enemy a
+-- feigning hunter just looks dead. What tells a real death apart is that
+-- we're awarded honor (Feign Death gives none). The honor message doesn't
+-- name the hunter -- it's just "You have been awarded 3 Honor." -- so it's
+-- matched by timing: a hunter death counts only when honor comes in within
+-- SAME_MOMENT of it. A feign that coincides with another honorable kill can
+-- still slip through; a hunter killed without honor for us stays silent.
+local SAME_MOMENT = 1.5 -- seconds; honor was seen arriving 1.0s after death
+local pendingHunters = {} -- { time = GetTime(), sound = entry, name = string }
+local honorTimes = {} -- GetTime() of unclaimed honor awards
+
+local function IsHunter(unit)
+	local _, class = UnitClass(unit)
+	return Known(class) and class == 'HUNTER'
+end
+
+-- index of the oldest time in list within SAME_MOMENT of t
+local function FindWithin(list, t)
+	for i, x in ipairs(list) do
+		if math.abs(x - t) <= SAME_MOMENT then return i end
+	end
+end
+
+local function MatchHunters()
+	local now = GetTime()
+	local i = 1
+	while pendingHunters[i] do
+		local hunter = pendingHunters[i]
+		local h = FindWithin(honorTimes, hunter.time)
+		if h then
+			Debug('%s: honor in, real death', hunter.name)
+			tremove(honorTimes, h)
+			tremove(pendingHunters, i)
+			PlayEntry(hunter.sound)
+		elseif now - hunter.time > SAME_MOMENT then
+			Debug('%s: no honor, feign death? no sound', hunter.name)
+			tremove(pendingHunters, i)
+		else
+			i = i + 1
+		end
+	end
+	-- anything older than the window can't match a later event
+	while honorTimes[1] and now - honorTimes[1] > SAME_MOMENT do tremove(honorTimes, 1) end
+end
+
+-- check now, and again once the window has passed
+local function Record(list, entry)
+	tinsert(list, entry)
+	MatchHunters()
+	C_Timer.After(SAME_MOMENT + 0.1, MatchHunters)
+end
+
+local function OnHunterDeath(unit)
+	local name = tostring(UnitName(unit))
+	Debug('waiting for honor for %s', name)
+	-- picked now, from the unit, so the party still hears the same sound
+	Record(pendingHunters, { time = GetTime(), sound = PickSound(unit), name = name })
+end
+
+local function OnHonorGain()
+	Debug('honor in')
+	Record(honorTimes, GetTime())
+end
+
 local function CheckUnit(unit, silent)
 	local key = UnitKey(unit)
 	if not key then return end
@@ -170,7 +234,11 @@ local function CheckUnit(unit, silent)
 
 	if dead and not state.dead and not silent and (state.enemy or IsEnemyNow(unit)) then
 		Debug('%s died', tostring(UnitName(unit)))
-		PlayDeathSound(unit)
+		if IsHunter(unit) then
+			OnHunterDeath(unit)
+		else
+			PlayDeathSound(unit)
+		end
 	end
 	state.dead = dead
 end
@@ -195,7 +263,10 @@ local function UpdateEvents()
 		events:RegisterEvent('PLAYER_FOCUS_CHANGED')
 		events:RegisterEvent('ARENA_OPPONENT_UPDATE')
 		events:RegisterEvent('PLAYER_ENTERING_WORLD')
+		events:RegisterEvent('CHAT_MSG_COMBAT_HONOR_GAIN')
 		wipe(units)
+		wipe(pendingHunters)
+		wipe(honorTimes)
 		CheckAll()
 	end
 end
@@ -415,6 +486,8 @@ events:SetScript('OnEvent', function(_, event, ...)
 	elseif event == 'NAME_PLATE_UNIT_ADDED' or event == 'ARENA_OPPONENT_UPDATE' then
 		-- a token now points at someone (maybe a corpse): record, don't play
 		CheckUnit((...), true)
+	elseif event == 'CHAT_MSG_COMBAT_HONOR_GAIN' then
+		OnHonorGain()
 	elseif event == 'PLAYER_TARGET_CHANGED' then
 		CheckUnit('target', true)
 	elseif event == 'PLAYER_FOCUS_CHANGED' then
