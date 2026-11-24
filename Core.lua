@@ -24,6 +24,7 @@ local SOUNDS = {
 	{ name = 'Windows XP shutdown', file = MEDIA .. 'windows_xp_shutdown.ogg' },
 	{ name = 'Tom scream', file = MEDIA .. 'tom-scream-01.ogg' },
 	{ name = 'MLG air horn', file = MEDIA .. 'mlg_air_horn.ogg' },
+	{ name = 'Jackpot', file = MEDIA .. 'jackpot.mp3' },
 }
 local ICON = MEDIA .. 'Icon'
 
