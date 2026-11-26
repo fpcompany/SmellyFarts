@@ -22,6 +22,11 @@ Each kill plays one of these:
 - Tom scream
 - MLG air horn
 - Jackpot
+- GTA V wasted
+- Half-Life 2 combine death
+- Half-Life 2 flatline
+- League of Legends announce
+- Toilet flush
 
 Everyone in the party running SmellyFarts hears the same sound for the same
 death. The sound is picked from who died and the server time (in 3-minute

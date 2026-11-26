@@ -25,6 +25,11 @@ local SOUNDS = {
 	{ name = 'Tom scream', file = MEDIA .. 'tom-scream-01.ogg' },
 	{ name = 'MLG air horn', file = MEDIA .. 'mlg_air_horn.ogg' },
 	{ name = 'Jackpot', file = MEDIA .. 'jackpot.mp3' },
+	{ name = 'GTA V wasted', file = MEDIA .. 'gta5_wasted.mp3' },
+	{ name = 'Half-Life 2 combine death', file = MEDIA .. 'hl2_combine_death.mp3' },
+	{ name = 'Half-Life 2 flatline', file = MEDIA .. 'hl2_flatline.mp3' },
+	{ name = 'League of Legends announce', file = MEDIA .. 'lol_announce.mp3' },
+	{ name = 'Toilet flush', file = MEDIA .. 'toilet_flush.mp3' },
 }
 local ICON = MEDIA .. 'Icon'
 
